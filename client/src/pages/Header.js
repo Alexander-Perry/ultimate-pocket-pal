@@ -6,7 +6,6 @@ const HeaderPage = () => {
 
     return (
         <>
-            some logo goes here
             <Navbar/>
         </>
     )
