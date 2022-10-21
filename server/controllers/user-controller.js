@@ -52,4 +52,19 @@ module.exports = {
     }
     return res.json(updatedUser);
   },
+
+  async createEvent({ user, body }, res) {
+    console.log(user)
+    console.log(body)
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: user._id },
+      { $push: { events: body } },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({message: "User not found"})
+    }
+    return res.json(updatedUser);
+  },
+
 };

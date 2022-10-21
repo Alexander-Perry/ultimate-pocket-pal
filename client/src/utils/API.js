@@ -27,9 +27,11 @@ export const loginUser = (userData) => {
     });
 };
   
-export const addEvent = (eventData, token) => {
-  return fetch('/api/users', {
-    method: 'PUT',
+export const createEvent = (eventData, token) => {
+  console.log(token)
+  console.log(eventData)
+  return fetch('/api/users/events', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       authorization: `Bearer ${token}`,

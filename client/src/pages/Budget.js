@@ -58,7 +58,7 @@ const UserBudget = () => {
                 {userData.events.map((event) => {
                     totalCost += event.cost;
                     return (
-                        <Grid item key={event.name}>{event.name} ${event.cost}</Grid>
+                        <Grid item key={event.title}>{event.title} ${event.cost}</Grid>
                     )
                 })}
                 <Grid item>Remaining  ${userData.budget - totalCost}</Grid>
