@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import Auth from '../utils/auth';
-import { getMe } from '../utils/API';
-import { Button, Container, Tabs, Tab , Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';
-
+import { getMe, deleteEvent } from '../utils/API';
+import { Button, Container, Tabs, Tab , Box, List, ListItem, IconButton} from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
     // If not logged in, display 'intro' page, with login button.
     // List 7 day tabs, Sunday - Sat
     // Each day show the users Events for that day
     // clicking the day allows adding and removing events
     // --> Events themselves provide buttons for this, and additional button added for each day to Add
     // Future-> Date functions to build into proper calendar
+
+
 
 const HomePage = () => {
     const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -43,6 +45,30 @@ const HomePage = () => {
         getUserData();
     }, [userDataLength]);
 
+    // const handleAddUserEvent = async 
+
+    const handleDeleteEvent = async (eventID) => {
+        const token = Auth.loggedIn() ? Auth.getToken() : null;
+        if (!token) {
+            return false;
+        }
+        try {
+            const response = await deleteEvent(eventID, token);
+            if (!response.ok) {
+                throw new Error('An error occurred');
+            }
+            const updatedUser = await response.json();
+            setUserData(updatedUser);
+            // removeEventId(eventID)
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    if (!Auth.loggedIn()) {
+        return <h2>Welcome, Please log in</h2>
+    }
+
     if (!userDataLength) {
         return <h2>LOADING...</h2>;
     }
@@ -66,16 +92,28 @@ const HomePage = () => {
                         </Box>
                         <Box sx={{ margin: 2, display: 'flex' }}>
                                 <Box>
-                                    <h2>{dayOfWeek[tabIndex]}</h2>
+                                <h2>{dayOfWeek[tabIndex]}</h2>
+                                <List>
                                     {userData.events
                                         .filter(event => event.date === tabIndex)
                                         .map((dayEvent) => {
                                             console.log(dayEvent)
                                             return (
-                                                <div>{dayEvent.name}</div>
+                                                <ListItem
+                                                    key={dayEvent._id} //need an ID field
+                                                    secondaryAction={
+                                                        <IconButton edge="end" onClick={()=> handleDeleteEvent(dayEvent._id)} >
+                                                            <DeleteForeverIcon />
+                                                        </IconButton>
+                                                    }
+                                                >
+                                                      <Button>{dayEvent.name }</Button>
+                                                </ListItem>
                                             )
                                         })
                                     }
+                                    <ListItem key={'AddEvent'}><Button >Add a new Event</Button></ListItem>
+                                    </List>
                                 </Box>
                         </Box>
                     </Box>

@@ -25,4 +25,24 @@ export const loginUser = (userData) => {
       },
       body: JSON.stringify(userData),
     });
-  };
+};
+  
+export const addEvent = (eventData, token) => {
+  return fetch('/api/users', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(eventData),
+  });
+};
+
+export const deleteEvent = (eventId, token) => {
+  return fetch(`/api/users/events/${eventId}`, {
+    method: 'DELETE',
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+};

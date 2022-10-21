@@ -40,5 +40,16 @@ module.exports = {
     const token = signToken(user);
     res.json({ token, user });
   },
-  
+
+  async deleteEvent({ user, params }, res) {
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: user._id },
+      { $pull: { events: { _id: params.eventId } } },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({message: "User not found"})
+    }
+    return res.json(updatedUser);
+  },
 };
