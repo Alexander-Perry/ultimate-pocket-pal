@@ -13,7 +13,7 @@ const eventSchema = new Schema(
             type: Number
         },
         date: {
-            type: String,
+            type: Number,
         },
         time: {
             type: String
