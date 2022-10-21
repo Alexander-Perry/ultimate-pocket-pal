@@ -48,3 +48,14 @@ export const deleteEvent = (eventId, token) => {
     },
   });
 };
+
+export const editEvent = (eventData, token) => {
+  return fetch(`/api/users/events/${eventData._id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(eventData),
+  });
+};

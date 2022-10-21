@@ -41,6 +41,18 @@ module.exports = {
     res.json({ token, user });
   },
 
+   async createEvent({ user, body }, res) {
+     const updatedUser = await User.findOneAndUpdate(
+      { _id: user._id },
+      { $push: { events: body } },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({message: "User not found"})
+    }
+    return res.json(updatedUser);
+  },
+
   async deleteEvent({ user, params }, res) {
     const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
@@ -53,12 +65,10 @@ module.exports = {
     return res.json(updatedUser);
   },
 
-  async createEvent({ user, body }, res) {
-    console.log(user)
-    console.log(body)
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: user._id },
-      { $push: { events: body } },
+  async editEvent({ user, body }, res) {
+     const updatedUser = await User.findOneAndUpdate(
+      { _id: user._id, "events._id":body._id },
+      { $set: { events: body } },
       { new: true }
     );
     if (!updatedUser) {
