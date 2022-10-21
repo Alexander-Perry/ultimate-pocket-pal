@@ -25,4 +25,26 @@ export const loginUser = (userData) => {
       },
       body: JSON.stringify(userData),
     });
-  };
+};
+  
+export const createEvent = (eventData, token) => {
+  console.log(token)
+  console.log(eventData)
+  return fetch('/api/users/events', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(eventData),
+  });
+};
+
+export const deleteEvent = (eventId, token) => {
+  return fetch(`/api/users/events/${eventId}`, {
+    method: 'DELETE',
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+};
