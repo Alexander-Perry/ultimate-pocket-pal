@@ -77,4 +77,18 @@ module.exports = {
     return res.json(updatedUser);
   },
 
+  async editBudget({ user, body }, res) {
+    console.log(body)
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: user._id, },
+      { $set: { budget: body.budget } },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({message: "User not found"})
+    }
+    return res.json(updatedUser);
+  },
+
+
 };

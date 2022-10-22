@@ -5,7 +5,7 @@ import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
 
 const SignupForm = () => {
-    const [userFormData, setUserFormData] = useState({ email: '', password: '' });
+    const [userFormData, setUserFormData] = useState({ email: '', password: '', budget: 300 });
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ const SignupForm = () => {
             console.error(err);
             setOpen(true);
         }
-        setUserFormData({
+        setUserFormData({...userFormData,
             name: '',
             email: '',
             password: ''

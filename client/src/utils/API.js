@@ -59,3 +59,14 @@ export const editEvent = (eventData, token) => {
     body: JSON.stringify(eventData),
   });
 };
+
+export const editBudget = (budgetData, token) => {
+  return fetch(`/api/users/budget`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(budgetData),
+  });
+};
