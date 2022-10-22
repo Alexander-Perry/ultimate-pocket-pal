@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Container, Toolbar, Menu, MenuItem, Box, Typography, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Auth from '../utils/auth';
+import { getMe} from '../utils/API';
 
 const NavBar = () => {
+    const [userData, setUserData] = useState({});
     const [anchorElNav, setAnchorElNav] = useState(null);
 
     const handleOpenNavMenu = (event) => {
@@ -14,6 +16,32 @@ const NavBar = () => {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
+
+    const userDataLength = Object.keys(userData).length;
+    useEffect(() => {
+        const getUserData = async () => {
+            try {
+                const token = Auth.loggedIn() ? Auth.getToken() : null;
+                if (!token) {
+                    return false;
+                }
+
+                const response = await getMe(token);
+                if (!response.ok) {
+                    throw new Error('an error occurred');
+                }
+
+                const user = await response.json();
+                setUserData(user);
+
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        getUserData();
+    }, [userDataLength]);
+
 
     return (
         <AppBar position="static">
@@ -64,18 +92,21 @@ const NavBar = () => {
                                     Home
                                 </Link>
                             </MenuItem>
-
-                            <MenuItem key='Budget' onClick={handleCloseNavMenu} >
-                                <Link to='/budget' underline="none">
-                                    Budget
-                                </Link>
-                            </MenuItem>
-                            {/* Replace the data below with added pages */}
-                            {/* <MenuItem key='Budget'onClick={handleCloseNavMenu} >
-                                <Link to='/budget'>
-                                    Budget
-                                </Link>
-                            </MenuItem> */}
+                            {Auth.loggedIn()
+                                ? (
+                                    <MenuItem key='Budget' onClick={handleCloseNavMenu} >
+                                        <Link to='/budget' underline="none">
+                                            Budget
+                                        </Link>
+                                    </MenuItem>
+                                )
+                                : (
+                                    <MenuItem key='login' onClick={handleCloseNavMenu} >
+                                        <Link to='/login' underline="none">
+                                            Login
+                                        </Link>
+                                    </MenuItem>
+                                )}
                         </Menu>
                     </Box>
 
@@ -104,9 +135,17 @@ const NavBar = () => {
                             }}>
                             Home
                         </Button>
-                        <Button key='Budget' component={Link} to='/budget' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block', '&:hover': { color: 'red' } }}>
-                            Budget
-                        </Button>
+                        {Auth.loggedIn()
+                            ? (
+                                <Button key='Budget' component={Link} to='/budget' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block', '&:hover': { color: 'red' } }}>
+                                    Budget
+                                </Button>
+                            )
+                            : (
+                                <Button key='login' component={Link} to='/login' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block', '&:hover': { color: 'red' } }}>
+                                    Login
+                                </Button>
+                            )}
                     </Box>
                     {Auth.loggedIn()
                         ? (
