@@ -3,6 +3,7 @@ import Auth from '../utils/auth';
 import { getMe, deleteEvent, createEvent, editEvent } from '../utils/API';
 import { Button, Container, Tabs, Tab, Box, List, ListItem, IconButton, FormGroup, FormLabel, TextField, Modal, Typography, Select, MenuItem } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Login from '../components/Login'
 
 // If not logged in, display 'intro' page, with login button.
 // List 7 day tabs, Sunday - Sat
@@ -137,7 +138,7 @@ const HomePage = () => {
 
 
     if (!Auth.loggedIn()) {
-        return <h2>Welcome, Please log in</h2>
+        return <Login/>
     }
 
     if (!userDataLength) {
@@ -151,7 +152,7 @@ const HomePage = () => {
                     <div>Welcome Page</div>
                 )
                 : (
-                    <Box display={'flex'} sx={{ bgcolor: '#888888' }}>
+                    <Box display={'flex'} >
                         <Box  >
                             <Tabs value={tabIndex} orientation='vertical' onChange={handleTabChange}>
                                 {dayOfWeek.map((day, index) => {

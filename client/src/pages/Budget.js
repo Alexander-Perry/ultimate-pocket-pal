@@ -3,6 +3,7 @@ import { Grid, Button, Modal, Box, Typography, FormGroup, FormLabel, TextField }
 import { Container } from '@mui/system';
 import { getMe, editBudget } from '../utils/API';
 import Auth from '../utils/auth';
+import Login from '../components/Login'
 
 const style = {
     position: 'absolute',
@@ -79,8 +80,10 @@ const UserBudget = () => {
     };
 
 
+    if (!Auth.loggedIn()) {
+        return <Login/>
+    }
 
-    // This is necessary to avoid blank screen
     if (!userDataLength) {
         return <h2>LOADING...</h2>;
     }

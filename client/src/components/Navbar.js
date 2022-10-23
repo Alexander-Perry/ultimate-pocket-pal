@@ -62,7 +62,7 @@ const NavBar = () => {
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        Ultimate Pocket Pal
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -111,7 +111,7 @@ const NavBar = () => {
                     </Box>
 
                     <Typography
-                        variant="h5"
+                        variant="h6"
                         noWrap
                         component="a"
                         href=""
@@ -126,7 +126,7 @@ const NavBar = () => {
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        Ultimate Pocket Pal
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <Button key='Home' component={Link} to='/' onClick={handleCloseNavMenu}
