@@ -2,6 +2,8 @@ const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 const eventSchema = require('./Event');
 
+// user model schema
+// Name not currently referenced, but ready for future use
 const userSchema = new Schema(
     {
         name: {
@@ -45,10 +47,7 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.isCorrectPassword = async function (password) {
     return bcrypt.compare(password, this.password);
 };
-// get the number of events saved
-// userSchema.virtual('eventCount').get(function () {
-//     return this.events.length;
-// });
+
 
 const User = model('User', userSchema);
 module.exports = User;

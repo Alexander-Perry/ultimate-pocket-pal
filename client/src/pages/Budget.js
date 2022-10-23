@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Modal, Box, Typography, FormGroup, FormLabel, TextField, Table, TableHead, TableCell, TableRow, TableContainer, TableBody } from '@mui/material';
 import { Container } from '@mui/system';
 import { getMe, editBudget } from '../utils/API';
 import Auth from '../utils/auth';
 import Login from '../components/Login'
 
+// Style for the Adjust Budget Modal
 const modalStyle = {
     position: 'absolute',
     top: '20%',
@@ -16,19 +17,24 @@ const modalStyle = {
     p: 4,
 };
 
+// UserBudget page function
 const UserBudget = () => {
     const [userData, setUserData] = useState({});
     const [modalOpen, setModalOpen] = useState(false);
+    // handler for Modal Close
     const handleModalClose = () => {
         setModalOpen(false);
     };
-    const [budgetFormData, setBudgetFormData] = useState({budget: ''});
+    const [budgetFormData, setBudgetFormData] = useState({ budget: '' });
+    // setState of budgetFormData on user input
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setBudgetFormData({ ...budgetFormData, [name]: value });
     };
+    // Zero out total cost before calculation from array of user events. 
     let totalCost = 0;
 
+    // hook to test for login and set state of userdata on success
     const userDataLength = Object.keys(userData).length;
     useEffect(() => {
         const getUserData = async () => {
@@ -53,14 +59,13 @@ const UserBudget = () => {
 
         getUserData();
     }, [userDataLength]);
-    // Functions here:
-    // Get list of user events for the week (title, cost)
-    // Display total budget, list of events + cost, then output total funds remaining
-    // Add option to adjust budget
- 
+
+    // Handler for Edit budget form
+    // Checks user is logged in
+    // calls editBudget function based on budgetFormData state, then triggers modal close
     const handleEditBudget = async (e) => {
         e.preventDefault();
-      console.log(budgetFormData)
+        console.log(budgetFormData)
         const token = Auth.loggedIn() ? Auth.getToken() : null;
         if (!token) {
             return false;
@@ -80,13 +85,15 @@ const UserBudget = () => {
 
 
     if (!Auth.loggedIn()) {
-        return <Login/>
+        return <Login />
     }
 
     if (!userDataLength) {
         return <h2>LOADING...</h2>;
     }
-    
+
+    // Render the Budget page
+    // Data rendered as a table
     return (
         <Container>
             <TableContainer>
@@ -98,10 +105,8 @@ const UserBudget = () => {
                                     WEEKLY BUDGET
                                 </Typography>
                             </TableCell>
-
                             <TableCell >
                                 <Button variant='outlined' color="secondary" onClick={() => setModalOpen(true)}>${userData.budget}</Button>
-
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -127,29 +132,24 @@ const UserBudget = () => {
                 </Table>
             </TableContainer>
 
-
-            {budgetFormData &&
-                <Modal name="addModal" open={modalOpen} onClose={handleModalClose}>
-                    <Box sx={modalStyle}>
-                        <Typography variant="h6" component="h2">
-                            Adjust Budget
-                        </Typography>
-                        <Typography component="div" sx={{ mt: 2 }}>
-                            <form>
-                                <FormGroup sx={{ display: 'grid', gap: 1 }}>
-                                    <FormLabel htmlFor='budget'>New Budget:</FormLabel>
-                                    <TextField name='budget' onChange={handleInputChange} />
-                                    <Button variant="outlined" name='submit' onClick={handleEditBudget} >Edit Budget</Button>
-                                </FormGroup>
-                            </form>
-                        </Typography>
-                    </Box>
-                </Modal>
-            }
-
+            <Modal name="addModal" open={modalOpen} onClose={handleModalClose}>
+                <Box sx={modalStyle}>
+                    <Typography variant="h6" component="h2">
+                        Adjust Budget
+                    </Typography>
+                    <Typography component="div" sx={{ mt: 2 }}>
+                        <form>
+                            <FormGroup sx={{ display: 'grid', gap: 1 }}>
+                                <FormLabel htmlFor='budget'>New Budget:</FormLabel>
+                                <TextField name='budget' onChange={handleInputChange} />
+                                <Button variant="outlined" name='submit' onClick={handleEditBudget} >Edit Budget</Button>
+                            </FormGroup>
+                        </form>
+                    </Typography>
+                </Box>
+            </Modal>
         </Container>
-
     )
-}
+};
 
 export default UserBudget;

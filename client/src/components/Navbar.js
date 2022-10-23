@@ -3,20 +3,24 @@ import { Link } from 'react-router-dom';
 import { AppBar, Container, Toolbar, Menu, MenuItem, Box, Typography, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Auth from '../utils/auth';
-import { getMe} from '../utils/API';
+import { getMe } from '../utils/API';
 
+// NavBar function
 const NavBar = () => {
     const [userData, setUserData] = useState({});
     const [anchorElNav, setAnchorElNav] = useState(null);
 
+    // Handler for opening the menu (on smaller screens)
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
 
+    // Handler for closing the menu (on smaller screens)
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
 
+    // useEffect function checks Login status, and triggers to changes to userData
     const userDataLength = Object.keys(userData).length;
     useEffect(() => {
         const getUserData = async () => {
@@ -42,7 +46,8 @@ const NavBar = () => {
         getUserData();
     }, [userDataLength]);
 
-
+    // render the NavBar
+    // Menu for smaller screens, box and buttons for larger screens
     return (
         <AppBar position="static">
             <Container>
@@ -66,9 +71,7 @@ const NavBar = () => {
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-
-                        <MenuIcon onClick={handleOpenNavMenu} />
-
+                        <MenuIcon onClick={handleOpenNavMenu} color='primary' sx={{":hover":{color: '#f50057'}}} />
                         <Menu
                             id="menu-appbar"
                             anchorEl={anchorElNav}
@@ -87,24 +90,18 @@ const NavBar = () => {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            <MenuItem key='Home' onClick={handleCloseNavMenu} >
-                                <Link to='/' underline="none">
-                                    Home
-                                </Link>
+                            <MenuItem key='Home' onClick={handleCloseNavMenu} component={Link} to='/' sx={{'&:hover': { color: '#f50057' }}}>
+                                Home
                             </MenuItem>
                             {Auth.loggedIn()
                                 ? (
-                                    <MenuItem key='Budget' onClick={handleCloseNavMenu} >
-                                        <Link to='/budget' underline="none">
-                                            Budget
-                                        </Link>
+                                    <MenuItem key='Budget' onClick={handleCloseNavMenu} component={Link} to='/budget' sx={{'&:hover': { color: '#f50057' }}}>
+                                        Budget
                                     </MenuItem>
                                 )
                                 : (
-                                    <MenuItem key='login' onClick={handleCloseNavMenu} >
-                                        <Link to='/login' underline="none">
-                                            Login
-                                        </Link>
+                                    <MenuItem key='login' onClick={handleCloseNavMenu} component={Link} to='/login' sx={{'&:hover': { color: '#f50057' }}} >
+                                        Login
                                     </MenuItem>
                                 )}
                         </Menu>
@@ -116,7 +113,7 @@ const NavBar = () => {
                         component="a"
                         href=""
                         sx={{
-                            mr: 2,
+                            mr: 1,
                             display: { xs: 'flex', md: 'none' },
                             flexGrow: 1,
                             fontFamily: 'monospace',
@@ -129,20 +126,20 @@ const NavBar = () => {
                         Ultimate Pocket Pal
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        <Button key='Home' component={Link} to='/' onClick={handleCloseNavMenu}
+                        <Button  key='Home' component={Link} to='/' onClick={handleCloseNavMenu}
                             sx={{
-                                my: 2, color: 'white', display: 'block', '&:hover': { color: 'red' }
+                                my: 2, color: 'white', display: 'block', '&:hover': { color: '#f50057' }
                             }}>
                             Home
                         </Button>
                         {Auth.loggedIn()
                             ? (
-                                <Button key='Budget' component={Link} to='/budget' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block', '&:hover': { color: 'red' } }}>
+                                <Button key='Budget' component={Link} to='/budget' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block', '&:hover': { color: '#f50057' } }}>
                                     Budget
                                 </Button>
                             )
                             : (
-                                <Button key='login' component={Link} to='/login' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block', '&:hover': { color: 'red' } }}>
+                                <Button key='login' component={Link} to='/login' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block', '&:hover': { color: '#f50057' } }}>
                                     Login
                                 </Button>
                             )}
@@ -150,14 +147,14 @@ const NavBar = () => {
                     {Auth.loggedIn()
                         ? (
                             <Box sx={{ flexGrow: 0 }}>
-                                <Button key='Logout' onClick={Auth.logout} sx={{ my: 2, color: 'white', display: 'block', '&:hover': { color: 'red' } }}>
+                                <Button key='Logout' onClick={Auth.logout} sx={{ my: 2, color: 'white', display: 'block', '&:hover': { color: '#f50057' } }}>
                                     Sign Out
                                 </Button>
                             </Box>
                         )
                         : (
                             <Box sx={{ flexGrow: 0 }}>
-                                <Button key='Login' component={Link} to='/login' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block', '&:hover': { color: 'red' } }}>
+                                <Button key='Login' component={Link} to='/login' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block', '&:hover': { color: '#f50057' } }}>
                                     Login
                                 </Button>
                             </Box>

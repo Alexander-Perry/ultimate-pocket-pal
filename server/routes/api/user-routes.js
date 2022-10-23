@@ -11,6 +11,7 @@ const {
 
 // import middleware
 const { authMiddleware } = require('../../utils/auth');
+// Routes
 router.route('/').post(createUser);
 router.route('/login').post(login);
 router.route('/me').get(authMiddleware, getUser);

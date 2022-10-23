@@ -4,41 +4,41 @@ import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 
+// Login Form Function 
 const LoginForm = () => {
-    const [userFormData, setUserFormData] = useState({ email: '', password: '' });
+    const [userFormData, setUserFormData] = useState({});
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
+    // handleInput Change
+    // Update the state for userFormData on text input
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setUserFormData({ ...userFormData, [name]: value });
     };
 
+    // Login Form Submission handler function
     const handleFormSubmit = async (e) => {
-        
         e.preventDefault();
-        console.log(userFormData)
-
+        // Try the Login function with the form data, pass the token to Auth
         try {
             const response = await loginUser(userFormData);
             if (!response.ok) {
                 throw new Error('Something went wrong');
             }
-            const { token, user } = await response.json();
-            console.log(user);
+            const { token } = await response.json();
             Auth.login(token);
-
         } catch (err) {
+            // Open the Alert (Snackbar)
             setOpen(true);
         }
 
-        setUserFormData({
-            email: '',
-            password: ''
-        });
+        // Clear the state data for userFormData
+        setUserFormData({ email: '', password: '' });
         navigate('/');
         
-    }
+    };
+    // Return the data for render
     return (
         <>
             <Snackbar open={open} onClose={() => setOpen(false)} autoHideDuration={5000}>

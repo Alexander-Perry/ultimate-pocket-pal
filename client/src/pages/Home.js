@@ -5,39 +5,47 @@ import { Button, Container, Tabs, Tab, Box, List, ListItem, IconButton, FormGrou
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Login from '../components/Login'
 
-// If not logged in, display 'intro' page, with login button.
-// List 7 day tabs, Sunday - Sat
-// Each day show the users Events for that day
-// clicking the day allows adding and removing events
-// --> Events themselves provide buttons for this, and additional button added for each day to Add
-// Future-> Date functions to build into proper calendar
+// If not logged in, display the Login page
+// Vertical tab list of Days of the week
+// Each day displays the User's events for that day, and an add event button
+// Clicking the event itself brings up a Modal window to edit the event data
+// Future: More detail for events and added Time blocks for each day. 
 
 
-
+// Home Function
+// Manages the User Events
 const HomePage = () => {
+    // Array of weekdays
     const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    // Get Today's date - for navigating to today's date on login
     const today = new Date().getDay();
 
     const [userData, setUserData] = useState({});
 
+    // state for selected Tab
     const [tabIndex, setTabIndex] = useState(today);
     const handleTabChange = (event, newTabIndex) => setTabIndex(newTabIndex);
 
+    // Modal control for Add Event
     const [addModalOpen, setAddModalOpen] = useState(false);
+    // Modal Control for Edit event
     const [eventModalOpen, setEventModalOpen] = useState(false);
 
+    // state for eventForm data
     const [eventFormData, setEventFormData] = useState({ title: '', cost: 0, date: tabIndex });
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setEventFormData({ ...eventFormData, [name]: value, date: tabIndex });
     };
+    // state for Selected Event
     const [selectedEventData, setSelectedEventData] = useState();
     const handleEditInputChange = (event) => {
         const { name, value } = event.target;
         setSelectedEventData({ ...selectedEventData, [name]: value })
     };
 
-    const style = {
+    // Style for the Modal windows
+    const ModalStyle = {
         position: 'absolute',
         top: '20%',
         left: '50%',
@@ -48,6 +56,7 @@ const HomePage = () => {
         p: 4,
     };
 
+    // Hook for UserData, chcek for login status
     const userDataLength = Object.keys(userData).length;
     useEffect(() => {
         const getUserData = async () => {
@@ -64,20 +73,22 @@ const HomePage = () => {
 
                 const user = await response.json();
                 setUserData(user);
-
             } catch (err) {
                 console.error(err);
             }
         };
-
         getUserData();
     }, [userDataLength]);
 
+    // Handler for closing the Modal windows
     const handleModalClose = () => {
         setAddModalOpen(false);
         setEventModalOpen(false);
     };
 
+    // Add event handler function,
+    //  Checks login status, if logged in call createEvent function with eventformdata and the user token
+    // On success, clear the form data and close the modal. 
     const handleAddEvent = async (e) => {
         e.preventDefault();
         const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -98,6 +109,9 @@ const HomePage = () => {
         handleModalClose();
     };
 
+    // Event to handle Deleting event 
+    // Check for login status
+    // Call the deleteEvent function with the eventID and user token
     const handleDeleteEvent = async (eventID) => {
         const token = Auth.loggedIn() ? Auth.getToken() : null;
         if (!token) {
@@ -115,6 +129,10 @@ const HomePage = () => {
         }
     };
 
+    // Function to handle Editing Events
+    // Checks for login status
+    // calls editEvent function with selectedEventData from the Modal and the user token
+    // On Success, clears the selectedEventData state and closes the modal 
     const handleEditEvent = async (e) => {
         e.preventDefault();
         const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -135,16 +153,17 @@ const HomePage = () => {
         handleModalClose();
     };
 
-
-
+    // Checks if user is logged in, if not, display the login screen
     if (!Auth.loggedIn()) {
         return <Login/>
     }
 
+    // display loading while waiting for userdata to load
     if (!userDataLength) {
         return <h2>LOADING...</h2>;
     }
 
+    // Render the page
     return (
         <Container>
             {!Auth.loggedIn()
@@ -188,14 +207,13 @@ const HomePage = () => {
                                         })
                                     }
                                     <ListItem key={'AddEvent'}><Button onClick={() => setAddModalOpen(true)} >Add a new Event</Button></ListItem>
-
                                 </List>
                             </Box>
                         </Box>
                     </Box>
                 )}
             <Modal name="addModal" open={addModalOpen} onClose={handleModalClose}>
-                <Box sx={style}>
+                <Box sx={ModalStyle}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Add an Event for {dayOfWeek[tabIndex]}
                     </Typography>
@@ -215,7 +233,7 @@ const HomePage = () => {
 
             {selectedEventData &&
                 <Modal name="editModal" open={eventModalOpen} onClose={handleModalClose}>
-                    <Box sx={style}>
+                    <Box sx={ModalStyle}>
                         <Typography id="edit-modal-title" variant="h6" component="h2">
                             Edit Event: {selectedEventData.title}
                         </Typography>

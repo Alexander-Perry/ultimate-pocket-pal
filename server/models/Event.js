@@ -1,5 +1,10 @@
 const { Schema, model } = require('mongoose');
 
+// event Schema
+// 
+// Note, some entries for future readiness
+// Not used: description, time, 
+// 
 const eventSchema = new Schema(
     {
         title: {

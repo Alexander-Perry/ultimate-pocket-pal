@@ -1,3 +1,6 @@
+// getMe function
+// GET request to '/me' 
+// part of Auth
 export const getMe = (token) => {
   return fetch('api/users/me', {
     headers: {
@@ -7,6 +10,8 @@ export const getMe = (token) => {
   });
 };
 
+// createUser function
+// sends POST with the user data entered into the Modal
 export const createUser = (userData) => {
     return fetch('/api/users', {
       method: 'POST',
@@ -17,6 +22,9 @@ export const createUser = (userData) => {
     });
 };
   
+// loginUser function
+// POST reqest to /login
+// Data is username/password
 export const loginUser = (userData) => {
     return fetch('/api/users/login', {
       method: 'POST',
@@ -26,10 +34,10 @@ export const loginUser = (userData) => {
       body: JSON.stringify(userData),
     });
 };
-  
+
+// createEvent function, 
+// POST request to /events
 export const createEvent = (eventData, token) => {
-  console.log(token)
-  console.log(eventData)
   return fetch('/api/users/events', {
     method: 'POST',
     headers: {
@@ -40,6 +48,9 @@ export const createEvent = (eventData, token) => {
   });
 };
 
+// deleteEvent function
+// DELETE request to /events:eventID
+// params: event._id
 export const deleteEvent = (eventId, token) => {
   return fetch(`/api/users/events/${eventId}`, {
     method: 'DELETE',
@@ -49,6 +60,9 @@ export const deleteEvent = (eventId, token) => {
   });
 };
 
+// editEvent function
+// PUT request to /events:event._id
+// eventData contains changed data
 export const editEvent = (eventData, token) => {
   return fetch(`/api/users/events/${eventData._id}`, {
     method: 'PUT',
@@ -60,6 +74,8 @@ export const editEvent = (eventData, token) => {
   });
 };
 
+// editBudget function
+// PUT request to /budget
 export const editBudget = (budgetData, token) => {
   return fetch(`/api/users/budget`, {
     method: 'PUT',

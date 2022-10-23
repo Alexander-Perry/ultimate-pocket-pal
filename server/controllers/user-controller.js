@@ -2,7 +2,7 @@ const { User } = require('../models');
 const { signToken } = require('../utils/auth');
 
 module.exports = {
-// get user by ID or email
+  // get user by ID or email
   async getUser({ user = null, params }, res) {
     const foundUser = await User.findOne({
       $or: [{ _id: user ? user._id : params.id }, { email: params.email }],
@@ -41,18 +41,22 @@ module.exports = {
     res.json({ token, user });
   },
 
-   async createEvent({ user, body }, res) {
-     const updatedUser = await User.findOneAndUpdate(
+  // createEvent, 
+  // find user by ID, push new entry into User events array
+  async createEvent({ user, body }, res) {
+    const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
       { $push: { events: body } },
       { new: true }
     );
     if (!updatedUser) {
-      return res.status(404).json({message: "User not found"})
+      return res.status(404).json({ message: "User not found" })
     }
     return res.json(updatedUser);
   },
 
+  // deleteEvent
+  // find user by ID, then pull event from events array based on event ID
   async deleteEvent({ user, params }, res) {
     const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
@@ -60,23 +64,27 @@ module.exports = {
       { new: true }
     );
     if (!updatedUser) {
-      return res.status(404).json({message: "User not found"})
+      return res.status(404).json({ message: "User not found" })
     }
     return res.json(updatedUser);
   },
 
+  // editEvent
+  // find user by ID and Event by ID, Set the new data for the event
   async editEvent({ user, body }, res) {
-     const updatedUser = await User.findOneAndUpdate(
-      { _id: user._id, "events._id":body._id },
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: user._id, "events._id": body._id },
       { $set: { events: body } },
       { new: true }
     );
     if (!updatedUser) {
-      return res.status(404).json({message: "User not found"})
+      return res.status(404).json({ message: "User not found" })
     }
     return res.json(updatedUser);
   },
 
+  // editBudget
+  // Find user by ID, update User Budget
   async editBudget({ user, body }, res) {
     console.log(body)
     const updatedUser = await User.findOneAndUpdate(
@@ -85,7 +93,7 @@ module.exports = {
       { new: true }
     );
     if (!updatedUser) {
-      return res.status(404).json({message: "User not found"})
+      return res.status(404).json({ message: "User not found" })
     }
     return res.json(updatedUser);
   },
