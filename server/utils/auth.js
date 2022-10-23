@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken');
 
 // set token secret and expiration date
-// SECRET TO MOVE TO ENV BEFORE PROD / SUBMISSION
-const secret = 'mysecretsshhhhh';
-const expiration = '2h';
+const secret = process.env.JWT_SECRET;
+const expiration = process.env.JWT_EXPIRE;
 
 module.exports = {
   // function for our authenticated routes

@@ -4,16 +4,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
 
+// Sign up form function
 const SignupForm = () => {
-    const [userFormData, setUserFormData] = useState({ email: '', password: '' });
+    const [userFormData, setUserFormData] = useState({ email: '', password: '', budget: 300 });
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
+    // set state of userFormData on text input
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setUserFormData({ ...userFormData, [name]: value });
     };
 
+    // handler function for form submission
+    // run createUser function using formd data and assign token on success
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -21,14 +25,13 @@ const SignupForm = () => {
             if (!response.ok) {
                 throw new Error('Something went wrong')
             }
-            const { token, user } = await response.json();
-            console.log(user);
+            const { token } = await response.json();
             Auth.login(token);
         } catch (err) {
             console.error(err);
             setOpen(true);
         }
-        setUserFormData({
+        setUserFormData({...userFormData,
             name: '',
             email: '',
             password: ''
@@ -36,6 +39,8 @@ const SignupForm = () => {
         navigate('/');
     };
 
+    // Render the signup page
+    // open alert on error
     return (
         <>
           <Snackbar  open={open} onClose={() => setOpen(false)} autoHideDuration={5000}>
