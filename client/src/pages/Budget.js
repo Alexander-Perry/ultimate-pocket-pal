@@ -1,16 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import { Grid, Button, Modal, Box, Typography, FormGroup, FormLabel, TextField } from '@mui/material';
+import { Button, Modal, Box, Typography, FormGroup, FormLabel, TextField, Table, TableHead, TableCell, TableRow, TableContainer, TableBody } from '@mui/material';
 import { Container } from '@mui/system';
 import { getMe, editBudget } from '../utils/API';
 import Auth from '../utils/auth';
 import Login from '../components/Login'
 
-const style = {
+const modalStyle = {
     position: 'absolute',
     top: '20%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    // width: 400,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -90,43 +89,61 @@ const UserBudget = () => {
     
     return (
         <Container>
-            <Grid
-                container
-                direction="column"
-                justifyContent="flex-start"
-                alignItems="flex-start"
-                sx={{p:2}}
-            >
-                <Grid item>Budget: ${userData.budget}
-                    <Button onClick={() => setModalOpen(true)}>Adjust</Button>
-            </Grid>
-                <Grid item>Costs</Grid>
-                {userData.events.map((event) => {
-                    totalCost += event.cost;
-                    return (
-                        <Grid item key={event.title}>{event.title} ${event.cost}</Grid>
-                    )
-                })}
-                <Grid item>Remaining  ${userData.budget - totalCost}</Grid>
-               
+            <TableContainer>
+                <Table sx={{ maxWidth: 700 }} >
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align='right'>
+                                <Typography fontWeight={700}>
+                                    WEEKLY BUDGET
+                                </Typography>
+                            </TableCell>
 
-            </Grid>
+                            <TableCell >
+                                <Button variant='outlined' color="secondary" onClick={() => setModalOpen(true)}>${userData.budget}</Button>
+
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {userData.events.map((event) => {
+                            totalCost += event.cost;
+                            return (
+                                <TableRow key={event._id}>
+                                    <TableCell align='right' key={event.title}> {event.title}</TableCell>
+                                    <TableCell key={event.cost}>${event.cost}</TableCell>
+                                </TableRow>
+                            )
+                        })}
+                        <TableRow>
+                            <TableCell align='right'>Remaining</TableCell>
+                            <TableCell>
+                                <Typography color={'primary'}>
+                                    ${userData.budget - totalCost}
+                                </Typography>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+
             {budgetFormData &&
-            <Modal name="addModal" open={modalOpen} onClose={handleModalClose}>
-                <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Adjust Budget
-                    </Typography>
-                    <Typography id="add-modal-description" component="div" sx={{ mt: 2 }}>
-                        <form>
-                            <FormGroup sx={{ display: 'grid', gap: 1 }}>
-                                <FormLabel htmlFor='budget'>New Budget:</FormLabel>
-                                <TextField name='budget' onChange={handleInputChange} />
-                                <Button variant="outlined" name='submit' onClick={handleEditBudget} >Edit Budget</Button>
-                            </FormGroup>
-                        </form>
-                    </Typography>
-                </Box>
+                <Modal name="addModal" open={modalOpen} onClose={handleModalClose}>
+                    <Box sx={modalStyle}>
+                        <Typography variant="h6" component="h2">
+                            Adjust Budget
+                        </Typography>
+                        <Typography component="div" sx={{ mt: 2 }}>
+                            <form>
+                                <FormGroup sx={{ display: 'grid', gap: 1 }}>
+                                    <FormLabel htmlFor='budget'>New Budget:</FormLabel>
+                                    <TextField name='budget' onChange={handleInputChange} />
+                                    <Button variant="outlined" name='submit' onClick={handleEditBudget} >Edit Budget</Button>
+                                </FormGroup>
+                            </form>
+                        </Typography>
+                    </Box>
                 </Modal>
             }
 

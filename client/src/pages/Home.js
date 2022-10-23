@@ -169,7 +169,6 @@ const HomePage = () => {
                                     {userData.events
                                         .filter(event => event.date === tabIndex)
                                         .map((dayEvent) => {
-
                                             return (
                                                 <ListItem
                                                     key={dayEvent._id}
