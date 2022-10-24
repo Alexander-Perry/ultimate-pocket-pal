@@ -5,8 +5,7 @@
 * User can create events for different days with a cost associated to work out from a weekly budget
 
 ## Deployment:
-* https://guarded-tor-99822.herokuapp.com/
-* Original Source: 
+* https://pacific-forest-65301.herokuapp.com
 
 
 ## Table of Contents: 
