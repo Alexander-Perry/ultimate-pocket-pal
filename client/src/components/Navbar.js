@@ -108,10 +108,11 @@ const NavBar = () => {
                     </Box>
 
                     <Typography
-                        variant="h6"
-                        noWrap
+                        variant="h7"
+                        
                         component="a"
                         href=""
+                        align='center'
                         sx={{
                             mr: 1,
                             display: { xs: 'flex', md: 'none' },
@@ -121,6 +122,7 @@ const NavBar = () => {
                             letterSpacing: '.3rem',
                             color: 'inherit',
                             textDecoration: 'none',
+                            
                         }}
                     >
                         Ultimate Pocket Pal

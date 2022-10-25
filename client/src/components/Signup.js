@@ -49,7 +49,7 @@ const SignupForm = () => {
                 </Alert>
             </Snackbar>
             <Container>
-            <Box sx={{ width: 400, m: 2, }}>
+            <Box sx={{ maxWidth: 400, m: 2, }}>
                     <form>
                     <FormGroup sx={{ display: 'grid', gap: 1 }}>
                         <FormLabel htmlFor='name'>Name</FormLabel>
